@@ -9,16 +9,15 @@ import smtplib
 from email.message import EmailMessage
 from twilio.rest import Client
 
-# Twilio API Credentials (Replace with your credentials)
-TWILIO_ACCOUNT_SID = "ACda22363ab0b338f46ab9be017afc6f57"
-TWILIO_AUTH_TOKEN = "f1a7bbca90e8b0fc1cde144033df80d2"
-TWILIO_PHONE_NUMBER = "+15076291316"
+TWILIO_ACCOUNT_SID = st.secrets["TWILIO_ACCOUNT_SID"]
+TWILIO_AUTH_TOKEN = st.secrets["TWILIO_AUTH_TOKEN"]
+TWILIO_PHONE_NUMBER = st.secrets["TWILIO_PHONE_NUMBER"]
 
-# Email Credentials (Use a Gmail account with App Passwords enabled)
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-SENDER_EMAIL = "vanshgujral175@gmail.com"
-SENDER_PASSWORD = "xaow qamz ekyp hblu"
+SMTP_SERVER = st.secrets["SMTP_SERVER"]
+SMTP_PORT = st.secrets["SMTP_PORT"]
+SENDER_EMAIL = st.secrets["SENDER_EMAIL"]
+SENDER_PASSWORD = st.secrets["SENDER_PASSWORD"]
+
 
 # Cache dataset generation to improve performance
 @st.cache_data
