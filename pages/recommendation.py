@@ -84,19 +84,21 @@ def send_email(to_email, name, panel_name, company_name):
 
 # Function to make an AI-powered confirmation call
 def make_call(to_phone, name, panel_name, company_name):
-    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-    message = f"Hello {name}, thank you for booking a {panel_name} solar panel from {company_name}. Our team will contact you soon."
+    client = Client(st.secrets["TWILIO_ACCOUNT_SID"], st.secrets["TWILIO_AUTH_TOKEN"])
     
+    message = f"Hello {name}, thank you for booking a {panel_name} solar panel from {company_name}. Our team will contact you soon."
     try:
         call = client.calls.create(
-            twiml=f'<Response><Say>{message}</Say></Response>',
+            twiml=f'<Response><Say voice="alice">{message}</Say></Response>',
             to=to_phone,
-            from_=TWILIO_PHONE_NUMBER
+            from_=st.secrets["TWILIO_PHONE_NUMBER"]
         )
-        print("📞 Call initiated successfully!")
+        st.success("📞 Call initiated successfully!")
+        print(call.sid)  # Optional: useful for debugging/logging
     except Exception as e:
-        print(f"⚠️ Error making call: {e}")
+        st.error(f"⚠️ Error making call: {e}")
+        print("Twilio Call Error:", e)
+
 
 # Function to save booking details & trigger email & call
 def save_booking(name, phone, email, panel_name, company_name):
