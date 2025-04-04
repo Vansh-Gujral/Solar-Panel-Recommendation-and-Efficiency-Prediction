@@ -88,13 +88,15 @@ def make_call(to_phone, name, panel_name, company_name):
 
     message = f"Hello {name}, thank you for booking a {panel_name} solar panel from {company_name}. Our team will contact you soon."
     
-    call = client.calls.create(
-        twiml=f'<Response><Say>{message}</Say></Response>',
-        to=to_phone,
-        from_=TWILIO_PHONE_NUMBER
-    )
-    
-    print("📞 Call initiated successfully!")
+    try:
+        call = client.calls.create(
+            twiml=f'<Response><Say>{message}</Say></Response>',
+            to=to_phone,
+            from_=TWILIO_PHONE_NUMBER
+        )
+        print("📞 Call initiated successfully!")
+    except Exception as e:
+        print(f"⚠️ Error making call: {e}")
 
 # Function to save booking details & trigger email & call
 def save_booking(name, phone, email, panel_name, company_name):
