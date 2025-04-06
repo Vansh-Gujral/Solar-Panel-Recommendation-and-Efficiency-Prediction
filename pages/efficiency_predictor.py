@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import xgboost as xgb
+import os
+import joblib 
 from sklearn.metrics import r2_score
 
 
@@ -38,22 +40,36 @@ def generate_efficiency_data():
     )
     return pd.DataFrame(data, index=dates)
 
+ # Add this import at the top if not already
+
 @st.cache_resource
 def train_model():
-    df = generate_efficiency_data()
-    X = pd.get_dummies(df.drop("Efficiency (%)", axis=1))
-    X["Temp_Humidity"] = X["Temperature (°C)"] * X["Humidity (%)"] / 100
-    y = df["Efficiency (%)"]
-    
-    model = xgb.XGBRegressor(
-        n_estimators=500,
-        max_depth=6,
-        learning_rate=0.05,
-        subsample=0.7,
-        random_state=42
-    )
-    model.fit(X, y)
-    return model, X.columns
+    model_path = "model.pkl"
+    cols_path = "feature_cols.pkl"
+
+    if os.path.exists(model_path) and os.path.exists(cols_path):
+        model = joblib.load(model_path)
+        columns = joblib.load(cols_path)
+    else:
+        df = generate_efficiency_data()
+        X = pd.get_dummies(df.drop("Efficiency (%)", axis=1))
+        X["Temp_Humidity"] = X["Temperature (°C)"] * X["Humidity (%)"] / 100
+        y = df["Efficiency (%)"]
+        
+        model = xgb.XGBRegressor(
+            n_estimators=500,
+            max_depth=6,
+            learning_rate=0.05,
+            subsample=0.7,
+            random_state=42
+        )
+        model.fit(X, y)
+        joblib.dump(model, model_path)
+        joblib.dump(X.columns, cols_path)
+        columns = X.columns
+
+    return model, columns
+
 
 # App Header
 st.title("☀️ Solar Panel Efficiency Predictor Pro")
