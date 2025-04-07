@@ -93,7 +93,6 @@ def make_call(to_phone, name, panel_name, company_name):
             to=to_phone,
             from_=st.secrets["TWILIO_PHONE_NUMBER"]
         )
-        st.success("📞 Call initiated successfully!")
         print(call.sid)  # Optional: useful for debugging/logging
     except Exception as e:
         st.error(f"⚠️ Error making call: {e}")
