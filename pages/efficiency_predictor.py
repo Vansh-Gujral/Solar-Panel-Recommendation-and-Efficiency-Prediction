@@ -7,7 +7,10 @@ import xgboost as xgb
 import os
 import joblib 
 from sklearn.metrics import r2_score
+# Constants
 
+CRITICAL_DUST_DAYS = 10  # You can adjust this threshold as needed
+OPTIMAL_EFFICIENCY_RANGE = (85, 95)  # Example efficiency range in percent
 
 def show_prediction():
     i=0
