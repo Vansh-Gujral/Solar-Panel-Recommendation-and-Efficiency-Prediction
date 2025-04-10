@@ -5,12 +5,19 @@ import requests
 # -----------------------------
 # UTILITY FUNCTIONS
 # -----------------------------
+st.set_page_config(
+    page_title="Solar Efficiency App",
+    layout="wide",
+    initial_sidebar_state="collapsed"  # 👈 This hides the sidebar by default
+)
 
 def load_lottie_url(url):
     r = requests.get(url)
     if r.status_code != 200:
         return None
     return r.json()
+
+
 
 def calculate_savings(electricity_rate, daily_consumption, sunlight_hours, panel_capacity):
     output_per_day = panel_capacity * sunlight_hours  # kWh/day
