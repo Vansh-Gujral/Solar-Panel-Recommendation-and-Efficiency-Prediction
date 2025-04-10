@@ -20,10 +20,36 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-def calculate_savings(monthly_bill):
-    """Estimates savings based on electricity bill."""
-    savings = monthly_bill * 0.6  # Assuming 60% savings
-    return max(savings, 0)
+def calculate_savings(electricity_rate, daily_consumption, sunlight_hours, panel_capacity):
+    """
+    Calculates solar savings based on user inputs.
+
+    Parameters:
+    - electricity_rate (float): ₹ per kWh
+    - daily_consumption (float): Daily energy usage in kWh
+    - sunlight_hours (float): Average sunlight hours per day
+    - panel_capacity (float): Solar panel capacity in kW
+
+    Returns:
+    - daily_solar_output (float): kWh/day produced by the solar system
+    - daily_savings (float): ₹ saved per day
+    - monthly_savings (float): ₹ saved per month
+    - yearly_savings (float): ₹ saved per year
+    """
+    # Calculate how much energy your system can generate in a day
+    daily_solar_output = panel_capacity * sunlight_hours  # kWh/day
+
+    # The actual solar energy used (limited by your daily consumption)
+    effective_solar_use = min(daily_solar_output, daily_consumption)  # kWh/day
+
+    # Daily savings
+    daily_savings = effective_solar_use * electricity_rate
+
+    # Monthly and yearly savings
+    monthly_savings = daily_savings * 30
+    yearly_savings = daily_savings * 365
+
+    return daily_solar_output, daily_savings, monthly_savings, yearly_savings
 
 def show_home_page():
     # Title and Description
@@ -51,11 +77,23 @@ def show_home_page():
     
     # Solar Savings Calculator
     st.subheader("💰 Solar Savings Calculator")
-    monthly_bill = st.number_input("Enter Your Monthly Electricity Bill (₹):", min_value=500, max_value=20000, value=5000, step=500)
-    
+
+# Take user inputs
+    electricity_rate = st.number_input("Electricity Rate (₹ per kWh):", min_value=1.0, max_value=20.0, value=8.0, step=0.5)
+    daily_consumption = st.number_input("Daily Electricity Consumption (kWh):", min_value=1.0, max_value=100.0, value=10.0, step=1.0)
+    sunlight_hours = st.number_input("Average Sunlight Hours per Day:", min_value=1.0, max_value=12.0, value=5.0, step=0.5)
+    panel_capacity = st.number_input("Solar Panel Capacity (kW):", min_value=0.5, max_value=20.0, value=3.0, step=0.5)
+
     if st.button("Estimate Savings", use_container_width=True):
-        savings = calculate_savings(monthly_bill)
-        st.success(f"🌞 Estimated Monthly Savings: ₹{savings:.2f}")
+        output, daily, monthly, yearly = calculate_savings(
+            electricity_rate, daily_consumption, sunlight_hours, panel_capacity
+        )
+
+        st.success(f"🌞 Estimated Monthly Savings: ₹{monthly:,.2f}")
+        st.info(f"📅 Estimated Yearly Savings: ₹{yearly:,.2f}")
+        st.write(f"🔋 Daily Solar Output: {output:.2f} kWh")
+        st.write(f"💸 Daily Savings: ₹{daily:.2f}")
+        st.markdown("---")
     
     st.markdown("---")
     
