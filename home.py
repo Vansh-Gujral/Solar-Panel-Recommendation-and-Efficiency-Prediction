@@ -178,4 +178,4 @@ elif st.session_state["nav"] == "predict":
     show_prediction()
 elif st.session_state["nav"] == "subsidy":
     from pages import subsidy
-    subsidy.show_subsidy_page()
+    
