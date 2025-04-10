@@ -5,12 +5,14 @@ import requests
 # -----------------------------
 # UTILITY FUNCTIONS
 # -----------------------------
-
 st.set_page_config(
-    page_title="Solar Efficiency App",
+    page_title="Solar Smart AI",
+    page_icon="🌞",
     layout="wide",
-    initial_sidebar_state="collapsed"  # 👈 This hides the sidebar by default
+    initial_sidebar_state="expanded"
 )
+
+# CSS to hide the sidebar
 hide_sidebar = """
     <style>
         [data-testid="stSidebar"][aria-expanded="true"]{
@@ -22,6 +24,8 @@ hide_sidebar = """
     </style>
 """
 st.markdown(hide_sidebar, unsafe_allow_html=True)
+
+
 def load_lottie_url(url):
     r = requests.get(url)
     if r.status_code != 200:
