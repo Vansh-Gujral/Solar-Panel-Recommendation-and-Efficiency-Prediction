@@ -12,71 +12,23 @@ from sklearn.metrics import r2_score
 def show_prediction():
     i=0
 
-OPTIMAL_EFFICIENCY_RANGE = (85, 92)
-CRITICAL_DUST_DAYS = 3 
 
-@st.cache_data
-def generate_efficiency_data():
-    dates = pd.date_range("2023-01-01", periods=365)
-    temp = 25 + 10 * np.sin(2 * np.pi * (dates.dayofyear - 105) / 365)
-    humidity = 60 + 20 * np.cos(2 * np.pi * (dates.dayofyear - 200) / 365)
-    
-    data = {
-        "Temperature (°C)": np.clip(temp + np.random.normal(0, 3, 365), 15, 45),
-        "Humidity (%)": np.clip(humidity + np.random.normal(0, 10, 365), 20, 95),
-        "Dust_Level": np.random.choice(["Low", "Medium", "High"], 365, p=[0.6, 0.3, 0.1]),
-        "Days_Since_Cleaning": np.random.randint(1, 31, 365),
-        "Panel_Age (years)": np.random.randint(0, 11, 365),
-    }
-    
-    data["Efficiency (%)"] = (
-        92 - 0.5 * data["Panel_Age (years)"] 
-        - 0.15 * data["Days_Since_Cleaning"]
-        - 3 * (data["Dust_Level"] == "Medium") 
-        - 7 * (data["Dust_Level"] == "High")
-        - 0.2 * (data["Temperature (°C)"] - 25) ** 2
-        + 0.1 * data["Humidity (%)"]
-        + np.random.normal(0, 1.5, 365)
-    )
-    return pd.DataFrame(data, index=dates)
 
  # Add this import at the top if not already
 
 @st.cache_resource
-def train_model():
-    model_path = "model.pkl"
-    cols_path = "feature_cols.pkl"
-
-    if os.path.exists(model_path) and os.path.exists(cols_path):
-        model = joblib.load(model_path)
-        columns = joblib.load(cols_path)
-    else:
-        df = generate_efficiency_data()
-        X = pd.get_dummies(df.drop("Efficiency (%)", axis=1))
-        X["Temp_Humidity"] = X["Temperature (°C)"] * X["Humidity (%)"] / 100
-        y = df["Efficiency (%)"]
-        
-        model = xgb.XGBRegressor(
-            n_estimators=500,
-            max_depth=6,
-            learning_rate=0.05,
-            subsample=0.7,
-            random_state=42
-        )
-        model.fit(X, y)
-        joblib.dump(model, model_path)
-        joblib.dump(X.columns, cols_path)
-        columns = X.columns
-
-    return model, columns
-
+def load_model():
+    import pickle
+    with open("pages/solar_model.pkl", "rb") as f:
+        model, feature_columns = pickle.load(f)
+    return model, feature_columns
 
 # App Header
 st.title("☀️ Solar Panel Efficiency Predictor Pro")
 st.caption("Professional-grade efficiency forecasting with maintenance recommendations")
 
 # Initialize model
-model, feature_columns = train_model()
+model, feature_columns = load_model()
 
 # Input Form
 with st.form(key="efficiency_form"):
