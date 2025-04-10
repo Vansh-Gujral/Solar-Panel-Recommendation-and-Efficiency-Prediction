@@ -218,5 +218,6 @@ def show_subsidy_page():
     st.markdown("---")
     if st.button("🔙 Back to Home"):
         st.session_state["nav"] = "home"
-        st.experimental_rerun()
+        from streamlit_extras.switch_page_button import switch_page
+        switch_page("Home")
 
