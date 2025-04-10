@@ -72,7 +72,7 @@ def show_home_page():
     st.markdown("---")
 
     # Buttons for Recommendations & Efficiency Prediction
-    col1, col2 = st.columns(2, gap="large")
+    col1, col2, col3 = st.columns(3, gap="large")
 
     if col1.button(
         "🔍 Panel Recommendation",
@@ -93,6 +93,17 @@ def show_home_page():
     ):
         st.session_state["nav"] = "predict"
         st.rerun()
+
+    if col3.button(
+    "💰 Subsidy Info",
+    key="subsidy",
+    help="Check government subsidy eligibility",
+    use_container_width=True,
+    type="secondary"
+    ):
+        st.session_state["nav"] = "subsidy"
+        st.rerun()
+    
 
     st.markdown("---")
 
@@ -142,6 +153,18 @@ def show_prediction():
         st.rerun()
 
 
+def show_subsidy():
+    """Lazy-load the subsidy info page"""
+    subsidy = load_module("subsidy")
+    if subsidy and hasattr(subsidy, 'show_subsidy'):
+        subsidy.show_subsidy()
+    else:
+        st.error("Subsidy module is missing required function.")
+
+    if st.button("← Back to Home", key="back_home_3"):
+        st.session_state["nav"] = "home"
+        st.rerun()
+
 # Ensure session state for navigation
 if "nav" not in st.session_state:
     st.session_state["nav"] = "home"
@@ -153,3 +176,6 @@ elif st.session_state["nav"] == "recommend":
     show_recommendation()
 elif st.session_state["nav"] == "predict":
     show_prediction()
+elif st.session_state["nav"] == "subsidy":
+    from pages import subsidy
+    subsidy.show_subsidy_page()
