@@ -167,50 +167,50 @@ if submitted:
         """)
 
 
-    if "cleaning_booked" not in st.session_state:
-        st.session_state.cleaning_booked = False
+    # if "cleaning_booked" not in st.session_state:
+    #     st.session_state.cleaning_booked = False
 
-    def save_cleaning_booking(name, email, address, date):
-        booking_details = f"Name: {name}, Email: {email}, Address: {address}, Date: {date}, Timestamp: {datetime.now()}\n"
-        with open("cleaning.txt", "a") as f:
-            f.write(booking_details)
+    # def save_cleaning_booking(name, email, address, date):
+    #     booking_details = f"Name: {name}, Email: {email}, Address: {address}, Date: {date}, Timestamp: {datetime.now()}\n"
+    #     with open("cleaning.txt", "a") as f:
+    #         f.write(booking_details)
 
-    with st.expander("🧹 Book Cleaning Service", expanded=False):
-        with st.form("booking_form"):
-            st.markdown("### 🧼 Panel Cleaning Booking Form")
+    # with st.expander("🧹 Book Cleaning Service", expanded=False):
+    #     with st.form("booking_form"):
+    #         st.markdown("### 🧼 Panel Cleaning Booking Form")
 
-            payment_image_path = "payment.png"
-            if os.path.exists(payment_image_path):
-                st.image(payment_image_path, caption="UPI Payment", width=200)
-            else:
-                st.info("💡 Add a UPI QR image as 'payment.jpg' to display here.")
+    #         payment_image_path = "payment.png"
+    #         if os.path.exists(payment_image_path):
+    #             st.image(payment_image_path, caption="UPI Payment", width=200)
+    #         else:
+    #             st.info("💡 Add a UPI QR image as 'payment.jpg' to display here.")
 
-            name = st.text_input("Your Name *")
-            email = st.text_input("Email Address *")
-            address = st.text_area("Full Address *")
-            preferred_date = st.date_input("Preferred Cleaning Date")
+    #         name = st.text_input("Your Name *")
+    #         email = st.text_input("Email Address *")
+    #         address = st.text_area("Full Address *")
+    #         preferred_date = st.date_input("Preferred Cleaning Date")
 
-            submitted = st.form_submit_button("📅 Book Now")
+    #         submitted = st.form_submit_button("📅 Book Now")
 
-            if submitted:
-                if not all([name, email, address]):
-                    st.error("⚠️ Please fill all required fields marked with *")
-                else:
-                # Save booking to file
-                    save_cleaning_booking(name, email, address, preferred_date)
+    #         if submitted:
+    #             if not all([name, email, address]):
+    #                 st.error("⚠️ Please fill all required fields marked with *")
+    #             else:
+    #             # Save booking to file
+    #                 save_cleaning_booking(name, email, address, preferred_date)
 
-                # Show success and animation
-                    st.success(f"✅ Cleaning service booked for {name} on {preferred_date.strftime('%B %d, %Y')}")
-                    st.balloons()
+    #             # Show success and animation
+    #                 st.success(f"✅ Cleaning service booked for {name} on {preferred_date.strftime('%B %d, %Y')}")
+    #                 st.balloons()
 
-                # Generate and show QR code
-                    qr_data = f"Name: {name}\nEmail: {email}\nAddress: {address}\nDate: {preferred_date}"
-                    qr = qrcode.make(qr_data)
-                    buf = BytesIO()
-                    qr.save(buf)
-                    buf.seek(0)
-                    qr_image = Image.open(buf)
-                    st.image(qr_image, caption="📲 Scan to Confirm", width=200)
+    #             # Generate and show QR code
+    #                 qr_data = f"Name: {name}\nEmail: {email}\nAddress: {address}\nDate: {preferred_date}"
+    #                 qr = qrcode.make(qr_data)
+    #                 buf = BytesIO()
+    #                 qr.save(buf)
+    #                 buf.seek(0)
+    #                 qr_image = Image.open(buf)
+    #                 st.image(qr_image, caption="📲 Scan to Confirm", width=200)
 
     # Priority 3: Age Notice
     if panel_age > 8:
