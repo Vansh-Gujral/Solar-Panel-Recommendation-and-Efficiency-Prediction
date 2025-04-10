@@ -8,3 +8,4 @@ seaborn
 Pillow
 twilio
 xgboost
+streamlit_lottie
