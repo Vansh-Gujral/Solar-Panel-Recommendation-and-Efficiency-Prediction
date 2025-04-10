@@ -218,4 +218,5 @@ def show_subsidy_page():
     st.markdown("---")
     if st.button("🔙 Back to Home"):
         st.session_state["nav"] = "home"
-        st.rerun()
+        st.experimental_rerun()
+
