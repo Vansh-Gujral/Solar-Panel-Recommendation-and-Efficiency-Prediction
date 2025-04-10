@@ -221,3 +221,4 @@ def show_subsidy_page():
         from streamlit_extras.switch_page_button import switch_page
         switch_page("Home")
 
+show_subsidy_page()
