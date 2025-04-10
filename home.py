@@ -45,7 +45,6 @@ def calculate_savings(electricity_rate, daily_consumption, sunlight_hours, panel
 # PAGE CONFIG & STYLING
 # -----------------------------
 
-st.set_page_config(page_title="Solar Smart AI", page_icon="🌞", layout="wide")
 
 st.markdown("""
     <style>
