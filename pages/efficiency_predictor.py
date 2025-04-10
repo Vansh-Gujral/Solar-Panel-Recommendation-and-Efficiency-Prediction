@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import xgboost as xgb
 from sklearn.metrics import r2_score
-import qrcode
 import os
 from PIL import Image
 from io import BytesIO
