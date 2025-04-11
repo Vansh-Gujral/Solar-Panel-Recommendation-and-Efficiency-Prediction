@@ -215,10 +215,6 @@ def show_subsidy_page():
         else:
             st.warning("Please complete all eligibility requirements.")
     # Back to Home button
-    st.markdown("---")
-    if st.button("🔙 Back to Home"):
-        st.session_state["nav"] = "home"
-        st.rerun()
 
 
 show_subsidy_page()
