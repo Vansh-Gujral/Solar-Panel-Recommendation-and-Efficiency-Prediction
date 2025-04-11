@@ -133,7 +133,7 @@ def show_payment_gateway(panel_name, company_name):
     st.markdown("### Enter Your Details to Complete Booking")
     with st.form(key="booking_form"):
         name = st.text_input("Full Name*", placeholder="John Doe")
-        phone = st.text_input("Phone Number*", placeholder="9876543210")
+        phone = st.text_input("Phone Number*", placeholder="+91 98765 43210")
         email = st.text_input("Email*", placeholder="example@gmail.com")
 
         submitted = st.form_submit_button("Submit Booking Request")
